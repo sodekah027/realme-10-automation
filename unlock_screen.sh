@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/data/data/com.termux/files/usr/bin/bash
 # ==========================================================
 # unlock_screen.sh
 # Fungsi: Cek kondisi layar, tekan tombol Power jika mati,
@@ -8,7 +8,7 @@
 
 # Pastikan izin root
 if [ "$(id -u)" -ne 0 ]; then
-    exec su -c "$0" "$@"
+    exec su -c "sh '$0' $*"
 fi
 
 echo "--- [1/3] Menjalankan: unlock_screen.sh ---"

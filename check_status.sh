@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/data/data/com.termux/files/usr/bin/bash
 # ==========================================================
 # check_status.sh
 # Fungsi: Memeriksa dan melaporkan status akhir perangkat
@@ -7,14 +7,14 @@
 
 # Pastikan izin root
 if [ "$(id -u)" -ne 0 ]; then
-    exec su -c "$0" "$@"
+    exec su -c "sh '$0' $*"
 fi
 
 echo "--- [3/3] Menjalankan: check_status.sh ---"
 
 # 1. Cek status Hotspot & IP
 HOTSPOT_ACTIVE=false
-if ip link show ap0 2>/dev/null | grep -q "state UP" || cmd wifi status 2>/dev/null | grep -q "SoftApManager"; then
+if ip link show ap0 2>/dev/null | grep -q "state UP" || dumpsys tethering 2>/dev/null | grep -q "ap0 - TetheredState"; then
     HOTSPOT_ACTIVE=true
 fi
 

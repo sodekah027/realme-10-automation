@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/data/data/com.termux/files/usr/bin/bash
 # ==========================================================
 # main.sh
 # Runner utama dengan Menu Interaktif untuk Realme 10
@@ -7,12 +7,12 @@
 # Pastikan izin root di awal
 if [ "$(id -u)" -ne 0 ]; then
     echo "[*] Meminta izin root..."
-    exec su -c "$0" "$@"
+    exec su -c "sh '$0' $*"
 fi
 
-DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+DIR="$(cd "$(dirname "$0")" && pwd)"
 
-# Fungsi untuk mengeksekusi script individual dan mengecek statusnya
+# Fungsi untuk mengeksekusi script individual
 run_script() {
     local script_name="$1"
     local script_desc="$2"
@@ -29,14 +29,14 @@ run_script() {
     echo " [EKSEKUSI] $script_desc ($script_name)"
     echo "=========================================================="
     
-    bash "$script_path"
+    sh "$script_path"
     local exit_code=$?
 
     echo ""
     if [ $exit_code -ne 0 ]; then
         echo "----------------------------------------------------------"
         echo "[GAGAL] Terjadi error pada: $script_name (Kode: $exit_code)" >&2
-        echo "Silakan perbaiki file '$script_name' untuk mengatasi kendala." >&2
+        echo "Silakan periksa dan perbaiki file '$script_name'." >&2
         echo "----------------------------------------------------------"
         return $exit_code
     else
@@ -82,7 +82,7 @@ run_all() {
 
 # Fungsi menampilkan menu interaktif
 show_menu() {
-    clear
+    echo ""
     echo "=========================================================="
     echo "             OTOMASI REALME 10 - MENU UTAMA               "
     echo "=========================================================="
@@ -92,10 +92,10 @@ show_menu() {
     echo "  [4] Jalankan Semua Alur Sekaligus  (1 -> 2 -> 3)"
     echo "  [0] Keluar"
     echo "=========================================================="
-    echo -n "Pilih menu [0-4]: "
+    printf "Pilih menu [0-4]: "
 }
 
-# Jika ada argumen CLI (misal: ./main.sh 1 atau ./main.sh all)
+# Eksekusi langsung jika menggunakan argumen CLI
 if [ -n "$1" ]; then
     case "$1" in
         1|unlock)
@@ -121,10 +121,14 @@ if [ -n "$1" ]; then
     esac
 fi
 
-# Loop menu interaktif saat dijalankan tanpa argumen
+# Loop menu interaktif
 while true; do
     show_menu
-    read -r pilihan
+    if ! read -r pilihan; then
+        echo ""
+        exit 0
+    fi
+
     case "$pilihan" in
         1)
             run_script "unlock_screen.sh" "Buka Kunci Layar (PIN 90000)"
@@ -140,7 +144,7 @@ while true; do
             ;;
         0|q|Q)
             echo ""
-            echo "Sampai jumpa!"
+            echo "Keluar."
             exit 0
             ;;
         *)
@@ -150,5 +154,6 @@ while true; do
     esac
 
     echo ""
-    read -r -p "Tekan [Enter] untuk kembali ke menu..." dummy
+    printf "Tekan [Enter] untuk kembali ke menu..."
+    read -r dummy || exit 0
 done
