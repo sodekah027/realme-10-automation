@@ -103,11 +103,12 @@ show_menu() {
     echo "  [3] Nyalakan Hotspot Pribadi        (enable_hotspot.sh)"
     echo "  [4] Matikan Hotspot Pribadi         (disable_hotspot.sh)"
     echo "  [5] Toggle Mode Pesawat / Ganti IP  (toggle_airplane.sh)"
-    echo "  [6] Cek Status Perangkat & Jaringan (check_status.sh)"
-    echo "  [7] Jalankan Otomasi Penuh          (Unlock -> Hotspot -> Lock)"
+    echo "  [6] Combo: Refresh IP + Hotspot ON  (combo_airplane_hotspot.sh)"
+    echo "  [7] Cek Status Perangkat & Jaringan (check_status.sh)"
+    echo "  [8] Jalankan Otomasi Penuh          (Unlock -> Hotspot -> Lock)"
     echo "  [0] Keluar"
     echo "=========================================================="
-    printf "Pilih menu [0-7]: "
+    printf "Pilih menu [0-8]: "
 }
 
 # Eksekusi langsung jika menggunakan argumen CLI
@@ -133,16 +134,20 @@ if [ -n "$1" ]; then
             run_script "toggle_airplane.sh" "Toggle Mode Pesawat / Ganti IP"
             exit $?
             ;;
-        6|status)
+        6|combo)
+            run_script "combo_airplane_hotspot.sh" "Combo: Refresh IP + Hotspot ON"
+            exit $?
+            ;;
+        7|status)
             run_script "check_status.sh" "Cek Status Perangkat & Jaringan"
             exit $?
             ;;
-        7|all)
+        8|all)
             run_all
             exit $?
             ;;
         *)
-            echo "Penggunaan: ./main.sh [1-7] atau jalankan tanpa argumen untuk menu interaktif."
+            echo "Penggunaan: ./main.sh [1-8] atau jalankan tanpa argumen untuk menu interaktif."
             exit 1
             ;;
     esac
@@ -173,9 +178,12 @@ while true; do
             run_script "toggle_airplane.sh" "Toggle Mode Pesawat / Ganti IP"
             ;;
         6)
-            run_script "check_status.sh" "Cek Status Perangkat & Jaringan"
+            run_script "combo_airplane_hotspot.sh" "Combo: Refresh IP + Hotspot ON"
             ;;
         7)
+            run_script "check_status.sh" "Cek Status Perangkat & Jaringan"
+            ;;
+        8)
             run_all
             ;;
         0|q|Q)
@@ -185,7 +193,7 @@ while true; do
             ;;
         *)
             echo ""
-            echo "[!] Pilihan tidak valid. Silakan pilih 0 sampai 7."
+            echo "[!] Pilihan tidak valid. Silakan pilih 0 sampai 8."
             ;;
     esac
 
