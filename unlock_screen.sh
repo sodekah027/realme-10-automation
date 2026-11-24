@@ -2,7 +2,7 @@
 # ==========================================================
 # unlock_screen.sh
 # Fungsi: Cek kondisi layar, tekan tombol Power jika mati,
-#         dan masukkan PIN 90000 jika layar terkunci.
+#         dan masukkan PIN 900000 jika layar terkunci.
 # Target: Realme 10 (RMX3630 - 1080x2400)
 # ==========================================================
 
@@ -38,8 +38,10 @@ if is_locked; then
     input swipe 540 1800 540 600 250
     sleep 0.6
 
-    echo "[*] Memasukkan PIN 90000..."
+    echo "[*] Memasukkan PIN 900000..."
     input keyevent 16 # 9
+    sleep 0.15
+    input keyevent 7  # 0
     sleep 0.15
     input keyevent 7  # 0
     sleep 0.15

@@ -10,7 +10,7 @@ Setiap script dibuat terpisah sesuai fungsinya masing-masing sehingga mudah diuj
 | Nama Script | Fungsi Utama |
 | :--- | :--- |
 | **`main.sh`** | Runner pengontrol utama dengan **Menu Interaktif**. Pengguna dapat memilih menu untuk menjalankan script tertentu atau seluruh rangkaian otomasi. |
-| **`unlock_screen.sh`** | Mengecek kondisi daya layar (mati/menyala/terkunci), menekan tombol Power jika mati, dan memasukkan PIN `90000` jika layar terkunci. |
+| **`unlock_screen.sh`** | Mengecek kondisi daya layar (mati/menyala/terkunci), menekan tombol Power jika mati, dan memasukkan PIN `900000` jika layar terkunci. |
 | **`enable_hotspot.sh`** | Memeriksa status hotspot, membuka menu pengaturan Hotspot Pribadi Realme UI, dan mengaktifkan toggle switch. |
 | **`check_status.sh`** | Memeriksa dan menampilkan laporan status akhir (Hotspot, IP Gateway, kondisi layar, dan level baterai). |
 
@@ -40,7 +40,7 @@ Akan tampil menu interaktif:
 ==========================================================
              OTOMASI REALME 10 - MENU UTAMA               
 ==========================================================
-  [1] Buka Kunci Layar PIN 90000     (unlock_screen.sh)
+  [1] Buka Kunci Layar PIN 900000     (unlock_screen.sh)
   [2] Nyalakan Hotspot Pribadi       (enable_hotspot.sh)
   [3] Cek Status Perangkat & Jaringan(check_status.sh)
   [4] Jalankan Semua Alur Sekaligus  (1 -> 2 -> 3)

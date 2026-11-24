@@ -54,7 +54,7 @@ run_all() {
     echo "       MENJALANKAN SEMUA OTOMASI BERURUTAN (1 -> 2 -> 3)  "
     echo "=========================================================="
 
-    run_script "unlock_screen.sh" "Buka Kunci Layar (PIN 90000)"
+    run_script "unlock_screen.sh" "Buka Kunci Layar (PIN 900000)"
     if [ $? -ne 0 ]; then
         echo "[STOP] Otomasi dihentikan karena error pada unlock_screen.sh." >&2
         return 1
@@ -86,7 +86,7 @@ show_menu() {
     echo "=========================================================="
     echo "             OTOMASI REALME 10 - MENU UTAMA               "
     echo "=========================================================="
-    echo "  [1] Buka Kunci Layar PIN 90000     (unlock_screen.sh)"
+    echo "  [1] Buka Kunci Layar PIN 900000     (unlock_screen.sh)"
     echo "  [2] Nyalakan Hotspot Pribadi       (enable_hotspot.sh)"
     echo "  [3] Cek Status Perangkat & Jaringan(check_status.sh)"
     echo "  [4] Jalankan Semua Alur Sekaligus  (1 -> 2 -> 3)"
@@ -99,7 +99,7 @@ show_menu() {
 if [ -n "$1" ]; then
     case "$1" in
         1|unlock)
-            run_script "unlock_screen.sh" "Buka Kunci Layar (PIN 90000)"
+            run_script "unlock_screen.sh" "Buka Kunci Layar (PIN 900000)"
             exit $?
             ;;
         2|hotspot)
@@ -131,7 +131,7 @@ while true; do
 
     case "$pilihan" in
         1)
-            run_script "unlock_screen.sh" "Buka Kunci Layar (PIN 90000)"
+            run_script "unlock_screen.sh" "Buka Kunci Layar (PIN 900000)"
             ;;
         2)
             run_script "enable_hotspot.sh" "Nyalakan Hotspot Pribadi"
