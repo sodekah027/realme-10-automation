@@ -47,13 +47,14 @@ run_script() {
     fi
 }
 
-# Fungsi untuk menjalankan alur penuh secara berurutan
+# Fungsi untuk menjalankan alur penuh (Unlock -> Hotspot On -> Status -> Lock)
 run_all() {
     echo ""
     echo "=========================================================="
-    echo "    MENJALANKAN OTOMASI PENUH BERURUTAN (Unlock -> Hotspot)"
+    echo "     MENJALANKAN OTOMASI PENUH (Unlock -> Hotspot -> Lock)"
     echo "=========================================================="
 
+    # 1. Buka Kunci Layar
     run_script "unlock_screen.sh" "Buka Kunci Layar (PIN 900000)"
     if [ $? -ne 0 ]; then
         echo "[STOP] Otomasi dihentikan karena error pada unlock_screen.sh." >&2
@@ -62,6 +63,7 @@ run_all() {
 
     sleep 1.0
 
+    # 2. Nyalakan Hotspot
     run_script "enable_hotspot.sh" "Nyalakan Hotspot Pribadi"
     if [ $? -ne 0 ]; then
         echo "[STOP] Otomasi dihentikan karena error pada enable_hotspot.sh." >&2
@@ -70,9 +72,19 @@ run_all() {
 
     sleep 1.0
 
+    # 3. Verifikasi Status Akhir
     run_script "check_status.sh" "Verifikasi Status Akhir"
     if [ $? -ne 0 ]; then
         echo "[STOP] Otomasi dihentikan karena error pada check_status.sh." >&2
+        return 1
+    fi
+
+    sleep 1.0
+
+    # 4. Kunci / Matikan Layar Kembali (menghemat baterai)
+    run_script "lock_screen.sh" "Kunci / Matikan Layar"
+    if [ $? -ne 0 ]; then
+        echo "[STOP] Otomasi dihentikan karena error pada lock_screen.sh." >&2
         return 1
     fi
 
@@ -87,13 +99,15 @@ show_menu() {
     echo "             OTOMASI REALME 10 - MENU UTAMA               "
     echo "=========================================================="
     echo "  [1] Buka Kunci Layar PIN 900000     (unlock_screen.sh)"
-    echo "  [2] Nyalakan Hotspot Pribadi        (enable_hotspot.sh)"
-    echo "  [3] Matikan Hotspot Pribadi         (disable_hotspot.sh)"
-    echo "  [4] Cek Status Perangkat & Jaringan (check_status.sh)"
-    echo "  [5] Jalankan Otomasi Penuh          (1 -> 2 -> 4)"
+    echo "  [2] Kunci / Matikan Layar           (lock_screen.sh)"
+    echo "  [3] Nyalakan Hotspot Pribadi        (enable_hotspot.sh)"
+    echo "  [4] Matikan Hotspot Pribadi         (disable_hotspot.sh)"
+    echo "  [5] Toggle Mode Pesawat / Ganti IP  (toggle_airplane.sh)"
+    echo "  [6] Cek Status Perangkat & Jaringan (check_status.sh)"
+    echo "  [7] Jalankan Otomasi Penuh          (Unlock -> Hotspot -> Lock)"
     echo "  [0] Keluar"
     echo "=========================================================="
-    printf "Pilih menu [0-5]: "
+    printf "Pilih menu [0-7]: "
 }
 
 # Eksekusi langsung jika menggunakan argumen CLI
@@ -103,24 +117,32 @@ if [ -n "$1" ]; then
             run_script "unlock_screen.sh" "Buka Kunci Layar (PIN 900000)"
             exit $?
             ;;
-        2|hotspot-on|on)
+        2|lock)
+            run_script "lock_screen.sh" "Kunci / Matikan Layar"
+            exit $?
+            ;;
+        3|hotspot-on|on)
             run_script "enable_hotspot.sh" "Nyalakan Hotspot Pribadi"
             exit $?
             ;;
-        3|hotspot-off|off)
+        4|hotspot-off|off)
             run_script "disable_hotspot.sh" "Matikan Hotspot Pribadi"
             exit $?
             ;;
-        4|status)
+        5|airplane|ap)
+            run_script "toggle_airplane.sh" "Toggle Mode Pesawat / Ganti IP"
+            exit $?
+            ;;
+        6|status)
             run_script "check_status.sh" "Cek Status Perangkat & Jaringan"
             exit $?
             ;;
-        5|all)
+        7|all)
             run_all
             exit $?
             ;;
         *)
-            echo "Penggunaan: ./main.sh [1|2|3|4|5] atau jalankan tanpa argumen untuk menu interaktif."
+            echo "Penggunaan: ./main.sh [1-7] atau jalankan tanpa argumen untuk menu interaktif."
             exit 1
             ;;
     esac
@@ -139,15 +161,21 @@ while true; do
             run_script "unlock_screen.sh" "Buka Kunci Layar (PIN 900000)"
             ;;
         2)
-            run_script "enable_hotspot.sh" "Nyalakan Hotspot Pribadi"
+            run_script "lock_screen.sh" "Kunci / Matikan Layar"
             ;;
         3)
-            run_script "disable_hotspot.sh" "Matikan Hotspot Pribadi"
+            run_script "enable_hotspot.sh" "Nyalakan Hotspot Pribadi"
             ;;
         4)
-            run_script "check_status.sh" "Cek Status Perangkat & Jaringan"
+            run_script "disable_hotspot.sh" "Matikan Hotspot Pribadi"
             ;;
         5)
+            run_script "toggle_airplane.sh" "Toggle Mode Pesawat / Ganti IP"
+            ;;
+        6)
+            run_script "check_status.sh" "Cek Status Perangkat & Jaringan"
+            ;;
+        7)
             run_all
             ;;
         0|q|Q)
@@ -157,7 +185,7 @@ while true; do
             ;;
         *)
             echo ""
-            echo "[!] Pilihan tidak valid. Silakan pilih 0 sampai 5."
+            echo "[!] Pilihan tidak valid. Silakan pilih 0 sampai 7."
             ;;
     esac
 
