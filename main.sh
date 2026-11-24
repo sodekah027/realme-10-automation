@@ -47,11 +47,11 @@ run_script() {
     fi
 }
 
-# Fungsi untuk menjalankan semua alur secara berurutan
+# Fungsi untuk menjalankan alur penuh secara berurutan
 run_all() {
     echo ""
     echo "=========================================================="
-    echo "       MENJALANKAN SEMUA OTOMASI BERURUTAN (1 -> 2 -> 3)  "
+    echo "    MENJALANKAN OTOMASI PENUH BERURUTAN (Unlock -> Hotspot)"
     echo "=========================================================="
 
     run_script "unlock_screen.sh" "Buka Kunci Layar (PIN 900000)"
@@ -87,12 +87,13 @@ show_menu() {
     echo "             OTOMASI REALME 10 - MENU UTAMA               "
     echo "=========================================================="
     echo "  [1] Buka Kunci Layar PIN 900000     (unlock_screen.sh)"
-    echo "  [2] Nyalakan Hotspot Pribadi       (enable_hotspot.sh)"
-    echo "  [3] Cek Status Perangkat & Jaringan(check_status.sh)"
-    echo "  [4] Jalankan Semua Alur Sekaligus  (1 -> 2 -> 3)"
+    echo "  [2] Nyalakan Hotspot Pribadi        (enable_hotspot.sh)"
+    echo "  [3] Matikan Hotspot Pribadi         (disable_hotspot.sh)"
+    echo "  [4] Cek Status Perangkat & Jaringan (check_status.sh)"
+    echo "  [5] Jalankan Otomasi Penuh          (1 -> 2 -> 4)"
     echo "  [0] Keluar"
     echo "=========================================================="
-    printf "Pilih menu [0-4]: "
+    printf "Pilih menu [0-5]: "
 }
 
 # Eksekusi langsung jika menggunakan argumen CLI
@@ -102,20 +103,24 @@ if [ -n "$1" ]; then
             run_script "unlock_screen.sh" "Buka Kunci Layar (PIN 900000)"
             exit $?
             ;;
-        2|hotspot)
+        2|hotspot-on|on)
             run_script "enable_hotspot.sh" "Nyalakan Hotspot Pribadi"
             exit $?
             ;;
-        3|status)
+        3|hotspot-off|off)
+            run_script "disable_hotspot.sh" "Matikan Hotspot Pribadi"
+            exit $?
+            ;;
+        4|status)
             run_script "check_status.sh" "Cek Status Perangkat & Jaringan"
             exit $?
             ;;
-        4|all)
+        5|all)
             run_all
             exit $?
             ;;
         *)
-            echo "Penggunaan: ./main.sh [1|2|3|4] atau jalankan tanpa argumen untuk menu interaktif."
+            echo "Penggunaan: ./main.sh [1|2|3|4|5] atau jalankan tanpa argumen untuk menu interaktif."
             exit 1
             ;;
     esac
@@ -137,9 +142,12 @@ while true; do
             run_script "enable_hotspot.sh" "Nyalakan Hotspot Pribadi"
             ;;
         3)
-            run_script "check_status.sh" "Cek Status Perangkat & Jaringan"
+            run_script "disable_hotspot.sh" "Matikan Hotspot Pribadi"
             ;;
         4)
+            run_script "check_status.sh" "Cek Status Perangkat & Jaringan"
+            ;;
+        5)
             run_all
             ;;
         0|q|Q)
@@ -149,7 +157,7 @@ while true; do
             ;;
         *)
             echo ""
-            echo "[!] Pilihan tidak valid. Silakan pilih 0 sampai 4."
+            echo "[!] Pilihan tidak valid. Silakan pilih 0 sampai 5."
             ;;
     esac
 
