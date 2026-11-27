@@ -1,5 +1,6 @@
 #!/data/data/com.termux/files/usr/bin/bash
 # ==========================================================
+# Jalankan ulang sebagai root bila belum root.
 # disable_hotspot.sh
 # Fungsi: Cek status hotspot, navigasi ke menu Hotspot Pribadi
 #         Realme UI, matikan switch toggle, tunggu hingga nonaktif,
@@ -9,7 +10,7 @@
 
 # Pastikan izin root
 if [ "$(id -u)" -ne 0 ]; then
-    exec su -c "sh '$0' $*"
+    exec su -c "sh '$0' \"\$@\""
 fi
 
 echo "--- Menjalankan: disable_hotspot.sh ---"

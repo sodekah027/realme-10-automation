@@ -1,5 +1,6 @@
 #!/data/data/com.termux/files/usr/bin/bash
 # ==========================================================
+# Jalankan ulang sebagai root bila belum root.
 # enable_hotspot.sh
 # Fungsi: Cek status hotspot, navigasi ke menu Hotspot Pribadi
 #         Realme UI, aktifkan switch toggle, tunggu hingga aktif,
@@ -9,7 +10,8 @@
 
 # Pastikan izin root
 if [ "$(id -u)" -ne 0 ]; then
-    exec su -c "sh '$0' $*"
+    su -c "sh '$0' \"\$@\""
+    exit $?
 fi
 
 echo "--- [2/3] Menjalankan: enable_hotspot.sh ---"

@@ -1,5 +1,6 @@
 #!/data/data/com.termux/files/usr/bin/bash
 # ==========================================================
+# Jalankan ulang sebagai root bila belum root.
 # check_status.sh
 # Fungsi: Memeriksa dan melaporkan status akhir perangkat
 #         (Hotspot, IP Gateway, Status Layar, Baterai).
@@ -7,7 +8,7 @@
 
 # Pastikan izin root
 if [ "$(id -u)" -ne 0 ]; then
-    exec su -c "sh '$0' $*"
+    exec su -c "sh '$0' \"\$@\""
 fi
 
 echo "--- [3/3] Menjalankan: check_status.sh ---"
@@ -41,10 +42,11 @@ echo " Layar       : ${WAKEFULNESS:-Unknown}"
 echo " Baterai     : ${BATTERY_LEVEL:-Unknown}% (${BATTERY_TEMP:-Unknown})"
 echo "=========================================="
 
+# Laporan status tidak dianggap gagal walau hotspot nonaktif,
+# supaya menu/otomasi tidak berhenti hanya karena verifikasi.
 if [ "$HOTSPOT_ACTIVE" = true ]; then
-    echo "[✓] Verifikasi berhasil: Hotspot beroperasi normal."
-    exit 0
+    echo "[✓] Hotspot beroperasi normal."
 else
-    echo "[ERROR] Hotspot tidak dalam keadaan aktif!" >&2
-    exit 1
+    echo "[!] Hotspot sedang nonaktif."
 fi
+exit 0

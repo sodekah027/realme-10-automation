@@ -3,11 +3,17 @@
 # main.sh
 # Runner utama dengan Menu Interaktif untuk Realme 10
 # ==========================================================
+# Catatan: seluruh proses berjalan sebagai root. Sub-script
+#          tetap dipanggil lewat sh karena Android tidak bisa
+#          mengeksekusi shebang Termux.
 
-# Pastikan izin root di awal
+# Pastikan izin root di awal. Setelah naik root, lanjutkan
+# logika dengan argumen yang sama (tanpa exec ulang).
 if [ "$(id -u)" -ne 0 ]; then
     echo "[*] Meminta izin root..."
-    exec su -c "sh '$0' $*"
+    DIR="$(cd "$(dirname "$0")" && pwd)"
+    su -c "sh '$DIR/main.sh' \"\$@\""
+    exit $?
 fi
 
 DIR="$(cd "$(dirname "$0")" && pwd)"
@@ -28,7 +34,7 @@ run_script() {
     echo "=========================================================="
     echo " [EKSEKUSI] $script_desc ($script_name)"
     echo "=========================================================="
-    
+
     sh "$script_path"
     local exit_code=$?
 
@@ -111,7 +117,7 @@ show_menu() {
 }
 
 # Eksekusi langsung jika menggunakan argumen CLI
-if [ -n "$1" ]; then
+if [ "$#" -gt 0 ]; then
     case "$1" in
         1|unlock)
             run_script "unlock_screen.sh" "Buka Kunci Layar (PIN 900000)"

@@ -1,5 +1,6 @@
 #!/data/data/com.termux/files/usr/bin/bash
 # ==========================================================
+# Jalankan ulang sebagai root bila belum root.
 # toggle_airplane.sh
 # Fungsi: Menyalakan dan mematikan Mode Pesawat (Airplane Mode)
 #         secara otomatis untuk refresh koneksi dan ganti IP seluler.
@@ -8,7 +9,7 @@
 
 # Pastikan izin root
 if [ "$(id -u)" -ne 0 ]; then
-    exec su -c "sh '$0' $*"
+    exec su -c "sh '$0' \"\$@\""
 fi
 
 echo "--- Menjalankan: toggle_airplane.sh ---"

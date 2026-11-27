@@ -1,5 +1,6 @@
 #!/data/data/com.termux/files/usr/bin/bash
 # ==========================================================
+# Jalankan ulang sebagai root bila belum root.
 # lock_screen.sh
 # Fungsi: Cek status layar. Jika menyala, tekan tombol Power
 #         untuk mengunci/mematikan layar (menghemat baterai).
@@ -8,7 +9,7 @@
 
 # Pastikan izin root
 if [ "$(id -u)" -ne 0 ]; then
-    exec su -c "sh '$0' $*"
+    exec su -c "sh '$0' \"\$@\""
 fi
 
 echo "--- Menjalankan: lock_screen.sh ---"
